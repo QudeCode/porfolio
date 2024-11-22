@@ -1,0 +1,100 @@
+---
+import NextJS from './../components/icons/NextJS.astro'
+import Tailwind from './../components/icons/Tailwind.astro'
+import Python from './../components/icons/Python.astro'
+import BigData from './../components/icons/BigData.astro'
+import JavaScript from './../components/icons/JavaScript.astro'
+import React from './../components/icons/React.astro'
+import NodeIcon from './../components/icons/NodeIcon.astro'
+import ArtificialInteligence from './../components/icons/ArtificialInteligence.astro'
+import Java from './../components/icons/Java.astro'
+import Selenium from './../components/icons/Selenium.astro'
+import Cucumber from './../components/icons/Cucumber.astro'
+import Php from './../components/icons/Php.astro'
+import Tdd from './../components/icons/Tdd.astro'
+import Robotics from './../components/icons/Robotics.astro'
+import GitHub from './../components/icons/GitHub.astro'
+
+export interface Tag {
+  name: string;
+  class: string;
+  icon: any;
+}
+
+export interface Tags {
+  [key: string]: Tag;
+}
+
+export const TAGS: Tags = {
+  NEXT: {
+    name: "Next.js",
+    class: "bg-orange text-white",
+    icon: NextJS,
+  },
+  TAILWIND: {
+    name: "Tailwind CSS",
+    class: "bg-[#003159] text-white",
+    icon: Tailwind,
+  },
+  PYTHON: {
+    name: "Python",
+    class: "bg-[#306998] text-white",
+    icon: Python,  
+  },
+  BIGDATA: {
+    name: "Big Data",
+    class: "bg-[#FF6F00] text-white",
+    icon: BigData,  
+  },
+  REACT: {
+    name: "React",
+    class: "bg-[#61DAFB] text-black",
+    icon: React,  
+  },
+  JAVASCRIPT: {
+    name: "Javascript",
+    class: "bg-[#61DAF4] text-black",
+    icon: JavaScript,  
+  },
+  NODE: {
+    name: "Node.js",
+    class: "bg-[#68A063] text-white",
+    icon: NodeIcon, 
+  },
+  AI: {
+    name: "Artificial Intelligence",
+    class: "bg-[#A100FF] text-white",
+    icon: ArtificialInteligence, 
+  },
+  JAVA: {
+    name: "Java",
+    class: "bg-[#007396] text-white",
+    icon: Java,  
+  },
+  SELENIUM: {
+    name: "Selenium",
+    class: "bg-[#43B02A] text-white",
+    icon: Selenium,  
+  },
+  CUCUMBER: {
+    name: "Cucumber",
+    class: "bg-[#23D700] text-white",
+    icon: Cucumber,  
+  },
+  PHP: {
+    name: "PHP",
+    class: "bg-[#777BB4] text-white",
+    icon: Php,  
+  },
+  TDD: {
+    name: "TDD",
+    class: "bg-[#667DC4] text-white",
+    icon: Tdd,  
+  },
+  ROBOTICS: {
+    name: "Robotics",
+    class: "bg-[#367DC4] text-white",
+    icon: Robotics,  
+  },
+};
+---

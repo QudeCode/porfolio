@@ -1,137 +1,49 @@
 ---
-import GitHub from "./icons/GitHub.astro"
-import NextJS from "./icons/NextJS.astro"
-import Tailwind from "./icons/Tailwind.astro"
-import Link from "./icons/Link.astro"
-import LinkButton from "./LinkButton.astro"
-import Python from "./icons/Python.astro"
-import ArtificialInteligence from "./icons/ArtificialInteligence.astro"
-import BigData from "./icons/BigData.astro"
-import Cucumber from "./icons/Cucumber.astro"
-import Java from "./icons/Java.astro"
-import JavaScript from "./icons/JavaScript.astro"
-import NodeIcon from "./icons/NodeIcon.astro"
-import Php from "./icons/Php.astro"
-import React from "./icons/React.astro"
-import Selenium from "./icons/Selenium.astro"
-import Tdd from "./icons/Tdd.astro"
-import Robotics from "./icons/Robotics.astro"
+import { TAGS, type Tag, type Tags } from '../data/tags.astro';
+import GitHub from './icons/GitHub.astro';
+import Link from './icons/Link.astro';
+import LinkButton from './LinkButton.astro';
 
-const TAGS = {
-  NEXT: {
-    name: "Next.js",
-    class: "bg-orange text-white",
-    icon: NextJS,
-  },
-  TAILWIND: {
-    name: "Tailwind CSS",
-    class: "bg-[#003159] text-white",
-    icon: Tailwind,
-  },
-  PYTHON: {
-    name: "Python",
-    class: "bg-[#306998] text-white",
-    icon: Python,  
-  },
-  BIGDATA: {
-    name: "Big Data",
-    class: "bg-[#FF6F00] text-white",
-    icon: BigData,  
-  },
-  REACT: {
-    name: "React",
-    class: "bg-[#61DAFB] text-black",
-    icon: React,  
-  },
-  JAVASCRIPT: {
-    name: "Javascript",
-    class: "bg-[#61DAF4] text-black",
-    icon: JavaScript,  
-  },
-  NODE: {
-    name: "Node.js",
-    class: "bg-[#68A063] text-white",
-    icon: NodeIcon, 
-  },
-  AI: {
-    name: "Artificial Intelligence",
-    class: "bg-[#A100FF] text-white",
-    icon: ArtificialInteligence, 
-  },
-  JAVA: {
-    name: "Java",
-    class: "bg-[#007396] text-white",
-    icon: Java,  
-  },
-  SELENIUM: {
-    name: "Selenium",
-    class: "bg-[#43B02A] text-white",
-    icon: Selenium,  
-  },
-  CUCUMBER: {
-    name: "Cucumber",
-    class: "bg-[#23D700] text-white",
-    icon: Cucumber,  
-  },
-  PHP: {
-    name: "PHP",
-    class: "bg-[#777BB4] text-white",
-    icon: Php,  
-  },
-  TDD: {
-    name: "TDD",
-    class: "bg-[#667DC4] text-white",
-    icon: Tdd,  
-  },
-  ROBOTICS: {
-    name: "Robotics",
-    class: "bg-[#367DC4] text-white",
-    icon: Robotics,  
-  },
+interface FetchedProject {
+  title: string;
+  description: string;
+  link: string;
+  github: string;
+  image: string;
+  tags: string[];
 };
 
-const PROJECTS = [
-  {
-    title: "Advanced Big Data Analysis with Kaggle",
-    description:
-      "Project focused on analyzing and visualizing large datasets using Kaggle. Implemented advanced Big Data techniques, including processing with Python (Pandas, NumPy) and visualizations with Matplotlib and Seaborn. Worked with public Kaggle datasets containing over 50K rows, extracting key insights.",
-    link: "pdfs/Quiros_kaggle_informe.pdf",
-    github: "https://github.com/QudeCode/UNI-APC-kaggle_videogames",
-    image: "/projects/kaggle_informe.webp",
-    tags: [TAGS.PYTHON, TAGS.BIGDATA],
-  },
-  {
-    title: "Minesweeper Game with Test-Driven Development",
-    description:
-      "This project employs TDD methodologies with PHP, JavaScript, HTML, and CSS. It focuses on creating unit tests using PHPUnit (PHP) and Jest (JavaScript) to ensure the game’s core functionalities. Techniques learned include designing tests for game components like GameController, Grid, and Cell classes, implementing various difficulty levels, validating game state transitions (e.g., marking cells, revealing mines), and ensuring boundary conditions (e.g., handling out-of-bounds cells). Additionally, the project applies event-driven JavaScript to manage UI updates, timers, and game state interactions.",
-    link: "https://github.com/QudeCode/UNI-TQS-buscaminas-tdd-project",
-    github: "https://github.com/QudeCode/UNI-TQS-buscaminas-tdd-project",
-    image: "/projects/minesweeper.webp",
-    tags: [TAGS.PHP, TAGS.JAVASCRIPT, TAGS.TDD],
-  },
-  {
-    title: "VoiceCan: AI-powered Canine Robot",
-    description: "VoiceCan is an interactive dog-like robot featuring mobility, voice recognition and object detection. The robot integrates AI-driven voice identification and movement algorithms, with control systems powered by a Raspberry Pi. My primary contribution to the project was the development of the web-based control interface, enabling remote interaction with the robot via voice commands. The web server was built with NextJS, allowing users to send audio commands that are processed by the Raspberry Pi to control the robot. Additionally, I collaborated developing the robot’s movement module, which is designed with two legs at the back and a rotating wheel in the front, allowing for smooth and natural movement similar to that of a dog. Since this design was unconventional, we didn’t have many references to follow, making it an interesting challenge.",
-    link: "https://www.youtube.com/watch?v=vig9vrsYnPg",
-    github: "https://github.com/QudeCode/UNI-RLP-VoiceCan",
-    image: "/projects/voicecan.webp",
-    tags: [TAGS.PYTHON, TAGS.AI, TAGS.ROBOTICS, TAGS.NEXT],
-  },
-  {
-    title: "Automated Testing Framework for Chollometro",
-    description:
-      "Developed an automated testing framework using Cucumber and Selenium WebDriver, focusing on optimizing testing processes and continuous integration. Cucumber was used for behavior-driven development (BDD) to define test scenarios in plain language. Selenium WebDriver was employed for automating web browser interactions, enabling the testing of complex web functionalities. This project enhanced expertise in advanced automated testing, web scraping, and Java application testing, ultimately improving the efficiency and reliability of web application validation.",
-    link: "https://github.com/QudeCode/UNI-TQS-chollometro_web_testing",
-    github: "https://github.com/QudeCode/UNI-TQS-chollometro_web_testing",
-    image: "/projects/tqs_chollometro.webp",
-    tags: [TAGS.JAVA, TAGS.SELENIUM, TAGS.CUCUMBER],
-  }
-];
+interface Project {
+  title: string;
+  description: string;
+  link: string;
+  github: string;
+  image: string;
+  tags: Tag[];
+}
+
+// Obtener los proyectos desde la API
+const fetchProjects = async () => {
+  const response = await fetch('http://localhost:3000/api/projects'); 
+  const projects: FetchedProject[] = await response.json();
+  return projects;
+};
+
+// Obtener proyectos al renderizar
+const fetchedProjects = await fetchProjects();
+const projects: Project[] = fetchedProjects.map(project => ({
+  ...project, // Copia los campos `title`, `description`, `link`, etc.
+  image: "/projects/"+project.image,
+  tags: project.tags
+    .map(tag => TAGS[tag]) // Convierte cada tag string en un objeto Tag
+    .filter(Boolean), // Elimina posibles valores `undefined` si la clave no existe en TAGS
+}));
+
 ---
 
 <div class="flex flex-col gap-y-16">
   {
-    PROJECTS.map(({ image, title, description, tags, link, github }) => (
+    projects.map(({ image, title, description, tags, link, github }) => (
     <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
   <div class="w-full md:w-1/2">
     <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
