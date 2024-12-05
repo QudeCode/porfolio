@@ -24,73 +24,96 @@ interface Project {
 
 // Obtener los proyectos desde la API
 const fetchProjects = async () => {
-  const response = await fetch('http://localhost:3000/api/projects'); 
-  const projects: FetchedProject[] = await response.json();
-  return projects;
+  try {
+    const response = await fetch('http://localhost:3000/api/projects');
+    
+    // Verificar si la respuesta es exitosa (código de estado 2xx)
+    if (!response.ok) {
+      throw new Error('Failed to fetch projects');
+    }
+    
+    const projects: FetchedProject[] = await response.json();
+    
+    // Si la API devuelve proyectos vacíos, podemos devolver un array vacío
+    return projects.length > 0 ? projects : [];
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    
+    // Si ocurre un error, podemos devolver un array vacío
+    return [];
+  }
 };
 
 // Obtener proyectos al renderizar
 const fetchedProjects = await fetchProjects();
-const projects: Project[] = fetchedProjects.map(project => ({
-  ...project, // Copia los campos `title`, `description`, `link`, etc.
-  image: "/projects/"+project.image,
-  tags: project.tags
-    .map(tag => TAGS[tag]) // Convierte cada tag string en un objeto Tag
-    .filter(Boolean), // Elimina posibles valores `undefined` si la clave no existe en TAGS
-}));
+
+// Si no hay proyectos, mostramos un mensaje o asignamos un valor por defecto
+const projects: Project[] = fetchedProjects.length > 0
+  ? fetchedProjects.map(project => ({
+      ...project, // Copia los campos `title`, `description`, `link`, etc.
+      image: "/projects/" + project.image,
+      tags: project.tags
+        .map(tag => TAGS[tag]) // Convierte cada tag string en un objeto Tag
+        .filter(Boolean), // Elimina posibles valores `undefined` si la clave no existe en TAGS
+    }))
+  : [];
 
 ---
 
 <div class="flex flex-col gap-y-16">
   {
-    projects.map(({ image, title, description, tags, link, github }) => (
-    <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
-  <div class="w-full md:w-1/2">
-    <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-      <img alt="project" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
-    </div>
-  </div>
+    projects.length === 0 ? (
+      <p>Sorry, there was an error loading the projects.</p>
+    ) : (
+      projects.map(({ image, title, description, tags, link, github }) => (
+        <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
+          <div class="w-full md:w-1/2">
+            <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
+              <img alt="project" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
+            </div>
+          </div>
 
-  <div class="w-full md:w-1/2 md:max-w-lg">
-    <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-      {title}
-    </h3>
-    <div class="flex flex-wrap mt-2">
-      <ul class="flex flex-row mb-2 gap-x-2">
-          {tags.map((tag) => (
-            <li>
-              <span
-                class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-              >
-                <tag.icon class="size-4" />
-                {tag.name}
-              </span>
-            </li>
-          ))}
-        </ul>
+          <div class="w-full md:w-1/2 md:max-w-lg">
+            <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
+              {title}
+            </h3>
+            <div class="flex flex-wrap mt-2">
+              <ul class="flex flex-row mb-2 gap-x-2">
+                  {tags.map((tag) => (
+                    <li>
+                      <span
+                        class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
+                      >
+                        <tag.icon class="size-4" />
+                        {tag.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
 
-      <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
-      <footer class="flex items-end justify-start mt-4 gap-x-4">
-          {github && (
-            <LinkButton href={github}>
-              <GitHub class="size-6" />
-              Code
-            </LinkButton>
-          )}
-          {link && (
-            <LinkButton
-              download={link.endsWith('.pdf') ? true : undefined} 
-              href={link.endsWith('.pdf') ? link : link}
-            >
-              <Link class="size-4" />
-              Preview
-            </LinkButton>
-          )}
-        </footer>
-    </div>
-  </div>
-</article>
-    ))
+              <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
+              <footer class="flex items-end justify-start mt-4 gap-x-4">
+                  {github && (
+                    <LinkButton href={github}>
+                      <GitHub class="size-6" />
+                      Code
+                    </LinkButton>
+                  )}
+                  {link && (
+                    <LinkButton
+                      download={link.endsWith('.pdf') ? true : undefined} 
+                      href={link.endsWith('.pdf') ? link : link}
+                    >
+                      <Link class="size-4" />
+                      Preview
+                    </LinkButton>
+                  )}
+                </footer>
+            </div>
+          </div>
+        </article>
+      ))
+    )
   }
 </div>
 
