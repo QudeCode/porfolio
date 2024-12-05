@@ -1,46 +1,20 @@
 ---
-import { TAGS, type Tag, type Tags } from '../data/tags.astro';
-import GitHub from './icons/GitHub.astro';
-import Link from './icons/Link.astro';
-import LinkButton from './LinkButton.astro';
-
-interface FetchedProject {
-  title: string;
-  description: string;
-  link: string;
-  github: string;
-  image: string;
-  tags: string[];
-};
-
-interface Project {
-  title: string;
-  description: string;
-  link: string;
-  github: string;
-  image: string;
-  tags: Tag[];
-}
+import Project from './Project.astro';
+import { TAGS, type Tag } from '../data/tags.astro';
 
 // Obtener los proyectos desde la API
 const fetchProjects = async () => {
   try {
     const response = await fetch('https://portfolio.edit.qudecode.com/api/projects');
     
-    // Verificar si la respuesta es exitosa (código de estado 2xx)
     if (!response.ok) {
       throw new Error('Failed to fetch projects');
     }
     
-    const projects: FetchedProject[] = await response.json();
-    console.log('Projects: ', JSON.stringify(projects))
-    
-    // Si la API devuelve proyectos vacíos, podemos devolver un array vacío
+    const projects = await response.json();
     return projects.length > 0 ? projects : [];
   } catch (error) {
     console.error('Error fetching projects:', error);
-    
-    // Si ocurre un error, podemos devolver un array vacío
     return [];
   }
 };
@@ -48,75 +22,31 @@ const fetchProjects = async () => {
 // Obtener proyectos al renderizar
 const fetchedProjects = await fetchProjects();
 
-// Si no hay proyectos, mostramos un mensaje o asignamos un valor por defecto
-const projects: Project[] = fetchedProjects.length > 0
-  ? fetchedProjects.map(project => ({
-      ...project, // Copia los campos `title`, `description`, `link`, etc.
+// Mapear los proyectos a los objetos que usan tags como objetos (no como strings)
+const projects = fetchedProjects.length > 0
+  ? fetchedProjects.map((project: { image: string, title: string, description: string, tags: string[], link: string, github: string }) => ({
+      ...project, 
       image: "/projects/" + project.image,
       tags: project.tags
-        .map(tag => TAGS[tag]) // Convierte cada tag string en un objeto Tag
-        .filter(Boolean), // Elimina posibles valores `undefined` si la clave no existe en TAGS
+        .map((tag: string) => TAGS[tag]) // Convertir cada tag string en un objeto Tag
+        .filter(Boolean), // Filtramos valores undefined si no existe la clave en TAGS
     }))
   : [];
-
 ---
 
 <div class="flex flex-col gap-y-16">
-  {
-    projects.length === 0 ? (
-      <p>Sorry, there was an error loading the projects.</p>
-    ) : (
-      projects.map(({ image, title, description, tags, link, github }) => (
-        <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
-          <div class="w-full md:w-1/2">
-            <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
-              <img alt="project" class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
-            </div>
-          </div>
-
-          <div class="w-full md:w-1/2 md:max-w-lg">
-            <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-              {title}
-            </h3>
-            <div class="flex flex-wrap mt-2">
-              <ul class="flex flex-row mb-2 gap-x-2">
-                  {tags.map((tag) => (
-                    <li>
-                      <span
-                        class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-                      >
-                        <tag.icon class="size-4" />
-                        {tag.name}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-              <div class="mt-2 text-gray-700 dark:text-gray-400">{description}</div>
-              <footer class="flex items-end justify-start mt-4 gap-x-4">
-                  {github && (
-                    <LinkButton href={github}>
-                      <GitHub class="size-6" />
-                      Code
-                    </LinkButton>
-                  )}
-                  {link && (
-                    <LinkButton
-                      download={link.endsWith('.pdf') ? true : undefined} 
-                      href={link.endsWith('.pdf') ? link : link}
-                    >
-                      <Link class="size-4" />
-                      Preview
-                    </LinkButton>
-                  )}
-                </footer>
-            </div>
-          </div>
-        </article>
-      ))
-    )
-  }
+  {projects.length === 0 ? (
+    <p>Sorry, there was an error loading the projects.</p>
+  ) : (
+    projects.map(({ image, title, description, tags, link, github }: { image: string, title: string, description: string, tags: Tag[], link: string, github: string }) => (
+      <Project 
+        image={image}
+        title={title}
+        description={description}
+        tags={tags}
+        link={link}
+        github={github}
+      />
+    ))
+  )}
 </div>
-
-
-
