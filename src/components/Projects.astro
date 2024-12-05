@@ -33,6 +33,7 @@ const fetchProjects = async () => {
     }
     
     const projects: FetchedProject[] = await response.json();
+    console.log('Projects: ', JSON.stringify(projects))
     
     // Si la API devuelve proyectos vacíos, podemos devolver un array vacío
     return projects.length > 0 ? projects : [];
